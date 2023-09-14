@@ -4,15 +4,13 @@ from statistics import mean
 INPUT_PATH = "data/winemag-data-130k-v2.csv.zip"
 OUTPUT_PATH = "data/reviews-per-country.csv"
 
-def wrangle(datapath:"path string") -> pd.DataFrame:
+def wrangle(datapath) -> pd.DataFrame:
     # import data
     reviews = pd.read_csv(datapath)
     # get relevant information
     out = reviews.groupby("country").points.agg([len, mean])
     # clean up dataframe/ format it as expected
-    out = out.rename(columns={"len":"count", "mean":"points"})#.reset_index()
-        # .reset_index call is not necessary and without the CSV is smaller :)
-    # round points column
+    out = out.rename(columns={"len":"count", "mean":"points"})
     out.points = out.points.apply(lambda x: round(x, ndigits=1))
 
     return out
